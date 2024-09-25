@@ -16,7 +16,7 @@ const crearTipo = (data) => {
     });
 }
 
-const actualizarTipo = (data) => {
+const actualizarTipo = (data, tipoEquipoId) => {
     return axiosInstance.put(`tipo-equipo/${tipoEquipoId}`, data, {
         header: {
             'Content-Type': 'application/json'

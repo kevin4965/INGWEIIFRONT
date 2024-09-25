@@ -1,7 +1,7 @@
 import { axiosInstance } from "../helper/axios-config";
 
 const getEstados = () => {
-    return axiosInstance.get('estado', {
+    return axiosInstance.get('estado-equipo', {
         header: {
             'Content-Type': 'application/json'
         }
@@ -16,7 +16,7 @@ const crearEstado = (data) => {
     });
 }
 
-const actualizarEstado = (data) => {
+const actualizarEstado = (data, estadoEquipoId) => {
     return axiosInstance.put(`estado-equipo/${estadoEquipoId}`, data, {
         header: {
             'Content-Type': 'application/json'

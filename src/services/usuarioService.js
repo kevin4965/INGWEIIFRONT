@@ -16,7 +16,7 @@ const crearUsuario = (data) => {
     });
 }
 
-const actualizarUsuario = (data) => {
+const actualizarUsuario = (data, usuarioId) => {
     return axiosInstance.put(`usuario/${usuarioId}`, data, {
         header: {
             'Content-Type': 'application/json'

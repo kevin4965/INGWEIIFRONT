@@ -16,7 +16,7 @@ const crearMarca = (data) => {
     });
 }
 
-const actualizarMarca = (data) => {
+const actualizarMarca = (data, marcaId) => {
     return axiosInstance.put(`marca/${marcaId}`, data, {
         header: {
             'Content-Type': 'application/json'
