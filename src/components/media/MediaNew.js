@@ -1,34 +1,159 @@
 import React, { useState, useEffect } from 'react';
-import { getEstados } from '../../services/estadoService';
-import { getMarcas } from '../../services/marcaService';
-import { getTipos } from '../../services/tipoService';
-import { getUsuarios } from '../../services/usuarioService';
-import { crearInventario } from '../../services/inventarioService';
+import { crearMedia } from '../../services/mediaService';
 import Swal from 'sweetalert2';
+import moment from 'moment';
 
+export const MediaNew = ({ handleOpenModal, listarMedias }) => {
 
-export const InventarioNew = ({ handleOpenModal, listarInventarios }) => {
+  const [valoresForm, setValoresForm] = useState({
+    serial: '',
+    titulo: '',
+    sinopsis: '',
+    urlPelicula: '',
+    portadaUrl: '',
+    anioEstreno: '',
+    generoPrincipal: '',
+    directorPrincipal: '',
+    productora: '',
+    tipo: ''
+  });
 
-    const [usuarios, setUsuarios ] = useState([]);
-    const [marcas, setMarcas ] = useState([]);
-    const [tipos, setTipos ] = useState([]);
-    const [estados, setEstados ] = useState([]);
-    const [ valoresForm, setValoresForm ] = useState([]);
-    const { serial = '', modelo = '', descripcion = '', color = '',
-        foto = '', fechaCompra = '', precio = '', usuario, marca, tipo, estado } = valoresForm
-    
-    const listarUsuarios = async () => {
-        try{
-            const { data } = await getUsuarios();
-            setUsuarios(data);
+  const {
+    serial,
+    titulo,
+    sinopsis,
+    urlPelicula,
+    portadaUrl,
+    anioEstreno,
+    generoPrincipal,
+    directorPrincipal,
+    productora,
+    tipo
+  } = valoresForm;
 
-        } catch(error) {
-            console.log(error);
-        }
+  // Manejar cambios en los inputs del formulario
+  const handleOnChange = (e) => {
+    setValoresForm({
+      ...valoresForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Manejar la creación de una nueva media
+  const handleCrearMedia = async (e) => {
+    e.preventDefault();
+    try {
+      Swal.fire({
+        allowOutsideClick: false,
+        text: 'Guardando...'
+      });
+      Swal.showLoading();
+
+      await crearMedia(valoresForm); // Llamar al servicio para crear la media
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Media creada con éxito',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+      // Limpiar el formulario
+      setValoresForm({
+        serial: '',
+        titulo: '',
+        sinopsis: '',
+        urlPelicula: '',
+        portadaUrl: '',
+        anioEstreno: '',
+        generoPrincipal: '',
+        directorPrincipal: '',
+        productora: '',
+        tipo: ''
+      });
+
+      listarMedias(); // Refrescar la lista de medios después de crear
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al crear la media',
+        text: 'Por favor intenta nuevamente.'
+      });
     }
+  };
 
-    useEffect(() => {
-        listarUsuarios();
+  return (
+    <div className="container-fluid mt-4">
+      <form onSubmit={handleCrearMedia}>
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="mb-3">
+              <label className="form-label">Serial</label>
+              <input required name="serial" value={serial} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="mb-3">
+              <label className="form-label">Título</label>
+              <input required name="titulo" value={titulo} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-12">
+            <div className="mb-3">
+              <label className="form-label">Sinopsis</label>
+              <textarea required name="sinopsis" value={sinopsis} className="form-control" onChange={handleOnChange}></textarea>
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="mb-3">
+              <label className="form-label">URL de la Película</label>
+              <input required name="urlPelicula" value={urlPelicula} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="mb-3">
+              <label className="form-label">Imagen de Portada</label>
+              <input required name="portadaUrl" value={portadaUrl} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="mb-3">
+              <label className="form-label">Año de Estreno</label>
+              <input required name="anioEstreno" value={anioEstreno} type="number" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="mb-3">
+              <label className="form-label">Género Principal</label>
+              <input required name="generoPrincipal" value={generoPrincipal} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="mb-3">
+              <label className="form-label">Director Principal</label>
+              <input required name="directorPrincipal" value={directorPrincipal} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="mb-3">
+              <label className="form-label">Productora</label>
+              <input required name="productora" value={productora} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="mb-3">
+              <label className="form-label">Tipo</label>
+              <input required name="tipo" value={tipo} type="text" className="form-control" onChange={handleOnChange} />
+            </div>
+          </div>
+        </div>
+        <button className="btn btn-primary mb-3">Guardar</button>
+      </form>
+    </div>
+  );
+};
+
     }, []);
 
 

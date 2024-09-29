@@ -1,26 +1,27 @@
-import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import { Header } from './components/ui/Header';
-import { EstadoView } from './components/estados/EstadoView';
-import { InventarioView } from './components/inventarios/InventarioView';
-import { MarcaView } from './components/marcas/MarcaView';
-import { TipoView } from './components/tipos/TipoView';
-import { UsuarioView } from './components/usuarios/UsuarioView';
+import React from 'react';
+import DirectoresView from './components/directores/DirectoresView'; // Sin destructuración
+import GenerosView from './components/generos/GenerosView';
+import MediaView from './components/media/MediaView';
+import ProductorasView from './components/productoras/ProductorasView';
+import TiposView from './components/tipos/TiposView';
+import Header from './components/ui/Header';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 const App = () => {
-  return <Router>
-    <Header/>
-    <Switch>
-        <Route exact path='/' component={ InventarioView } />
-        <Route exact path='/usuarios' component={ UsuarioView } />
-        <Route exact path='/marcas' component={ MarcaView } />
-        <Route exact path='/estados' component={ EstadoView } />
-        <Route exact path='/tipos' component={ TipoView } />
-        <Redirect to='/' />
-    </Switch>
-  </Router>
-}
+  return (
+    <Router>
+      <Header />
+      <Switch>
+        <Route exact path="/" component={GenerosView} />  {/* Ruta principal */}
+        <Route path="/generos" component={GenerosView} />
+        <Route path="/directores" component={DirectoresView} />
+        <Route path="/media" component={MediaView} />
+        <Route path="/productoras" component={ProductorasView} />
+        <Route path="/tipos" component={TiposView} />
+        <Redirect to="/" /> {/* Redirigir a la raíz si no coincide con ninguna ruta */}
+      </Switch>
+    </Router>
+  );
+};
 
-export {
-    App 
-}
+export default App;

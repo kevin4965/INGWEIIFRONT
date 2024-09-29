@@ -1,24 +1,27 @@
 import { axiosInstance } from "../helper/axios-config";
 
+// Obtener todos los tipos de equipo
 const getTipos = () => {
     return axiosInstance.get('tipo-equipo', {
-        header: {
+        headers: { 
             'Content-Type': 'application/json'
         }
     });
 }
 
+// Crear un nuevo tipo de equipo
 const crearTipo = (data) => {
     return axiosInstance.post('tipo-equipo', data, {
-        header: {
+        headers: { 
             'Content-Type': 'application/json'
         }
     });
 }
 
-const actualizarTipo = (data, tipoEquipoId) => {
+// Actualizar un tipo de equipo existente
+const actualizarTipo = (tipoEquipoId, data) => {
     return axiosInstance.put(`tipo-equipo/${tipoEquipoId}`, data, {
-        header: {
+        headers: { 
             'Content-Type': 'application/json'
         }
     });

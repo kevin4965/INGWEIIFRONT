@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { getTipos, crearTipo, actualizarTipo } from '../../services/tipoService'; // Asegúrate de tener este servicio
+import { getDirectores, crearDirector, actualizarDirector } from '../../services/directorService'; // Asegúrate de tener este servicio
 import Swal from 'sweetalert2';
 const moment = require('moment');
 
-export const TipoView = () => {
+export const DirectorView = () => {
   const [valoresForm, setValoresForm] = useState({});
-  const [tipos, setTipos] = useState([]);
-  const { nombre = '', descripcion = '' } = valoresForm;
-  const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
+  const [directores, setDirectores] = useState([]);
+  const { nombre = '', estado = '' } = valoresForm;
+  const [directorSeleccionado, setDirectorSeleccionado] = useState(null);
 
-  const listarTipos = async () => {
+  const listarDirectores = async () => {
     try {
       Swal.fire({
         allowOutsideClick: false,
         text: 'Cargando...'
       });
       Swal.showLoading();
-      const resp = await getTipos();
-      setTipos(resp.data);
+      const resp = await getDirectores();
+      setDirectores(resp.data);
       Swal.close();
     } catch (error) {
       console.log(error);
@@ -26,14 +26,14 @@ export const TipoView = () => {
   };
 
   useEffect(() => {
-    listarTipos();
+    listarDirectores();
   }, []);
 
   const handleOnChange = (e) => {
     setValoresForm({ ...valoresForm, [e.target.name]: e.target.value });
   };
 
-  const handleCrearTipo = async (e) => {
+  const handleCrearDirector = async (e) => {
     e.preventDefault();
     try {
       Swal.fire({
@@ -42,15 +42,15 @@ export const TipoView = () => {
       });
       Swal.showLoading();
 
-      if (tipoSeleccionado) {
-        await actualizarTipo(valoresForm, tipoSeleccionado);
-        setTipoSeleccionado(null);
+      if (directorSeleccionado) {
+        await actualizarDirector(valoresForm, directorSeleccionado);
+        setDirectorSeleccionado(null);
       } else {
-        await crearTipo(valoresForm);
+        await crearDirector(valoresForm);
       }
 
-      setValoresForm({ nombre: '', descripcion: '' });
-      listarTipos();
+      setValoresForm({ nombre: '', estado: '' });
+      listarDirectores();
       Swal.close();
     } catch (error) {
       console.log(error);
@@ -58,15 +58,15 @@ export const TipoView = () => {
     }
   };
 
-  const handleActualizarTipo = async (e, tipo) => {
+  const handleActualizarDirector = async (e, director) => {
     e.preventDefault();
-    setValoresForm({ nombre: tipo.nombre, descripcion: tipo.descripcion });
-    setTipoSeleccionado(tipo._id);
+    setValoresForm({ nombre: director.nombre, estado: director.estado });
+    setDirectorSeleccionado(director._id);
   };
 
   return (
     <div className='container-fluid mt-4'>
-      <form onSubmit={(e) => handleCrearTipo(e)}>
+      <form onSubmit={(e) => handleCrearDirector(e)}>
         <div className="row">
           <div className="col-lg-6">
             <div className="mb-3">
@@ -77,9 +77,12 @@ export const TipoView = () => {
           </div>
           <div className="col-lg-6">
             <div className="mb-3">
-              <label className="form-label">Descripción</label>
-              <textarea required name='descripcion' value={descripcion} className="form-control"
-                onChange={(e) => handleOnChange(e)} />
+              <label className="form-label">Estado</label>
+              <select required name='estado' value={estado} className="form-select" onChange={(e) => handleOnChange(e)}>
+                <option value="">--SELECCIONE--</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
             </div>
           </div>
         </div>
@@ -91,7 +94,7 @@ export const TipoView = () => {
           <tr>
             <th scope='row'>#</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Descripción</th>
+            <th scope="col">Estado</th>
             <th scope='col'>Fecha Creación</th>
             <th scope='col'>Fecha Actualización</th>
             <th scope='col'>Acciones</th>
@@ -99,16 +102,16 @@ export const TipoView = () => {
         </thead>
         <tbody>
           {
-            tipos.length > 0 && tipos.map((tipo, index) => {
+            directores.length > 0 && directores.map((director, index) => {
               return (
-                <tr key={tipo._id}>
+                <tr key={director._id}>
                   <th scope='row'>{index + 1}</th>
-                  <td>{tipo.nombre}</td>
-                  <td>{tipo.descripcion}</td>
-                  <td>{moment(tipo.fechaCreacion).format('DD-MM-YYYY HH:mm')}</td>
-                  <td>{moment(tipo.fechaActualizacion).format('DD-MM-YYYY HH:mm')}</td>
+                  <td>{director.nombre}</td>
+                  <td>{director.estado}</td>
+                  <td>{moment(director.fechaCreacion).format('DD-MM-YYYY HH:mm')}</td>
+                  <td>{moment(director.fechaActualizacion).format('DD-MM-YYYY HH:mm')}</td>
                   <td>
-                    <button className='btn btn-success btn-sm me-2' onClick={(e) => handleActualizarTipo(e, tipo)}>Actualizar</button>
+                    <button className='btn btn-success btn-sm me-2' onClick={(e) => handleActualizarDirector(e, director)}>Actualizar</button>
                     <button className='btn btn-danger btn-sm'>Eliminar</button>
                   </td>
                 </tr>
